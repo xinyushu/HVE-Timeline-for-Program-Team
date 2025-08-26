@@ -569,7 +569,7 @@
     <script>
         let selectedCell = null;
         let isEditMode = false;
-        const EDIT_PASSWORD = 'timeline2025'; // Change this password as needed
+        const EDIT_PASSWORD = 'timeline2025';
 
         // Auto-calculate current week
         function getCurrentWeek() {
@@ -603,7 +603,6 @@
                 49: new Date(2025, 11, 1)   // December 1, 2025
             };
 
-            // Find current week by comparing dates
             let currentWeekNum = 26;
             let currentWeekStart = weekDates[26];
 
@@ -621,10 +620,8 @@
                 }
             }
 
-            // Calculate the end date of current week
             const currentWeekEnd = new Date(currentWeekStart.getTime() + 6 * 24 * 60 * 60 * 1000);
 
-            // Format dates
             const formatDate = (date) => {
                 const months = ['January', 'February', 'March', 'April', 'May', 'June',
                               'July', 'August', 'September', 'October', 'November', 'December'];
@@ -635,11 +632,10 @@
                 weekNumber: currentWeekNum,
                 weekName: `WK${currentWeekNum}`,
                 dateRange: `${formatDate(currentWeekStart)} - ${formatDate(currentWeekEnd)}, 2025`,
-                headerIndex: currentWeekNum - 24 // WK26 is index 2, so WK26-24=2
+                headerIndex: currentWeekNum - 24
             };
         }
 
-        // Update current week display
         function updateCurrentWeekDisplay() {
             const currentWeek = getCurrentWeek();
             const currentWeekText = document.getElementById('currentWeekText');
@@ -651,7 +647,7 @@
             return currentWeek;
         }
 
-        // Updated timeline data from latest CSV
+        // Timeline data
         const timelineData = [
             {
                 marketplace: 'US',
@@ -696,7 +692,6 @@
             document.getElementById('editModeIndicator').classList.add('show');
             document.getElementById('toggleControlsBtn').classList.remove('hidden');
 
-            // Enable contentEditable for all editable content
             document.querySelectorAll('.editable-content').forEach(cell => {
                 cell.contentEditable = true;
             });
@@ -709,7 +704,6 @@
             document.getElementById('toggleControlsBtn').classList.add('hidden');
             document.getElementById('controlsPanel').classList.remove('show');
 
-            // Disable contentEditable for all editable content
             document.querySelectorAll('.editable-content').forEach(cell => {
                 cell.contentEditable = false;
                 cell.classList.remove('selected');
@@ -726,41 +720,35 @@
                 document.getElementById('authError').textContent = '';
             }
         }
-
         // Initialize table with data
         function initializeTable() {
             const tbody = document.querySelector('#timelineTable tbody');
             tbody.innerHTML = '';
 
             timelineData.forEach(marketData => {
-                // Sourcing Progress Row
                 const sourcingRow = document.createElement('tr');
                 sourcingRow.className = 'sourcing-progress-row';
 
-                // Marketplace cell (rowspan 2)
                 const marketplaceCell = document.createElement('td');
                 marketplaceCell.className = 'marketplace-cell';
                 marketplaceCell.rowSpan = 2;
                 marketplaceCell.textContent = marketData.marketplace;
                 sourcingRow.appendChild(marketplaceCell);
 
-                // Action type cell
                 const sourcingTypeCell = document.createElement('td');
                 sourcingTypeCell.className = 'action-type-cell';
                 sourcingTypeCell.textContent = 'Sourcing Progress';
                 sourcingRow.appendChild(sourcingTypeCell);
 
-                // Data cells for Sourcing Progress
                 marketData.sourcingProgress.forEach((content, index) => {
                     const cell = document.createElement('td');
                     cell.setAttribute('data-week-index', index + 2);
 
                     const editableDiv = document.createElement('div');
                     editableDiv.className = 'editable-content';
-                    editableDiv.contentEditable = false; // Start in readonly mode
+                    editableDiv.contentEditable = false;
                     editableDiv.innerHTML = content.replace(/\n/g, '<br>');
 
-                    // Add special highlighting for PBDD and BFCM
                     if (content.includes('PBDD (FCST)')) {
                         cell.classList.add('pbdd-highlight');
                     } else if (content.includes('BFCM (FCST)')) {
@@ -773,24 +761,21 @@
 
                 tbody.appendChild(sourcingRow);
 
-                // AM Action Row
                 const actionRow = document.createElement('tr');
                 actionRow.className = 'am-action-row';
 
-                // Action type cell (no marketplace cell due to rowspan)
                 const actionTypeCell = document.createElement('td');
                 actionTypeCell.className = 'action-type-cell';
                 actionTypeCell.textContent = 'AM Action';
                 actionRow.appendChild(actionTypeCell);
 
-                // Data cells for AM Action
                 marketData.amAction.forEach((content, index) => {
                     const cell = document.createElement('td');
                     cell.setAttribute('data-week-index', index + 2);
 
                     const editableDiv = document.createElement('div');
                     editableDiv.className = 'editable-content';
-                    editableDiv.contentEditable = false; // Start in readonly mode
+                    editableDiv.contentEditable = false;
                     editableDiv.innerHTML = content.replace(/\n/g, '<br>');
 
                     cell.appendChild(editableDiv);
@@ -801,13 +786,12 @@
             });
         }
 
-        // Highlight current week (now automatic)
+        // Highlight current week
         function highlightCurrentWeek() {
             const currentWeek = getCurrentWeek();
             const currentWeekHeaderIndex = currentWeek.headerIndex;
             const table = document.getElementById('timelineTable');
 
-            // Remove previous current week highlighting
             document.querySelectorAll('.current-week-header').forEach(el => {
                 el.classList.remove('current-week-header');
             });
@@ -815,15 +799,12 @@
                 el.classList.remove('current-week-column');
             });
 
-            // Only highlight if the current week is within our timeline range (WK26-WK49)
             if (currentWeekHeaderIndex >= 2 && currentWeekHeaderIndex <= 21) {
-                // Highlight header
                 const headerRow = table.querySelector('thead tr');
                 if (headerRow && headerRow.cells[currentWeekHeaderIndex]) {
                     headerRow.cells[currentWeekHeaderIndex].classList.add('current-week-header');
                 }
 
-                // Highlight data cells using data-week-index attribute
                 const dataCells = table.querySelectorAll('td[data-week-index]');
                 dataCells.forEach(cell => {
                     const weekIndex = parseInt(cell.getAttribute('data-week-index'));
@@ -833,21 +814,16 @@
                 });
             }
         }
-        }
 
-        // Setup cell selection and editing (only in edit mode)
+        // Setup cell interaction
         function setupCellInteraction() {
             document.addEventListener('click', function(e) {
                 if (e.target.classList.contains('editable-content') && isEditMode) {
-                    // Remove selection from other cells
                     document.querySelectorAll('.editable-content').forEach(c => c.classList.remove('selected'));
-
-                    // Select current cell
                     e.target.classList.add('selected');
                     selectedCell = e.target;
                     e.stopPropagation();
                 } else {
-                    // Deselect when clicking outside
                     if (selectedCell) {
                         selectedCell.classList.remove('selected');
                         selectedCell = null;
@@ -855,7 +831,6 @@
                 }
             });
 
-            // Auto-save on content change (only in edit mode)
             document.addEventListener('input', function(e) {
                 if (e.target.classList.contains('editable-content') && isEditMode) {
                     saveData();
@@ -863,7 +838,6 @@
             });
         }
 
-        // Toggle controls panel (only in edit mode)
         function toggleControls() {
             if (isEditMode) {
                 const panel = document.getElementById('controlsPanel');
@@ -871,7 +845,6 @@
             }
         }
 
-        // Apply color to selected cell (only in edit mode)
         function applyColor(color) {
             if (selectedCell && isEditMode) {
                 const parentCell = selectedCell.parentElement;
@@ -885,7 +858,6 @@
             }
         }
 
-        // Save data to localStorage (only in edit mode)
         function saveData() {
             if (!isEditMode) return;
 
@@ -910,7 +882,6 @@
 
             localStorage.setItem('timelineData_protected', JSON.stringify(data));
 
-            // Show save confirmation
             const saveBtn = document.querySelector('button[onclick="saveData()"]');
             if (saveBtn) {
                 const originalText = saveBtn.textContent;
@@ -923,7 +894,6 @@
             }
         }
 
-        // Load data from localStorage
         function loadData() {
             const savedData = localStorage.getItem('timelineData_protected');
             if (savedData) {
@@ -954,7 +924,6 @@
             }
         }
 
-        // Reset to original data (only in edit mode)
         function resetData() {
             if (!isEditMode) {
                 alert('Please enable edit mode first to reset data.');
@@ -966,12 +935,12 @@
                 initializeTable();
                 highlightCurrentWeek();
                 if (isEditMode) {
-                    enableEditMode(); // Re-enable editing after reset
+                    enableEditMode();
                 }
             }
         }
 
-        // Handle Enter key in password input
+        // Event listeners
         document.addEventListener('keydown', function(e) {
             if (e.target.id === 'passwordInput' && e.key === 'Enter') {
                 checkPassword();
@@ -998,16 +967,15 @@
         document.addEventListener('DOMContentLoaded', function() {
             initializeTable();
             setupCellInteraction();
-            updateCurrentWeekDisplay(); // Auto-update current week display
-            highlightCurrentWeek(); // Auto-highlight current week
+            updateCurrentWeekDisplay();
+            highlightCurrentWeek();
             loadData();
-            setReadOnlyMode(); // Start in readonly mode
+            setReadOnlyMode();
 
-            // Update current week every hour (optional - for long-running sessions)
             setInterval(() => {
                 updateCurrentWeekDisplay();
                 highlightCurrentWeek();
-            }, 3600000); // 1 hour = 3600000 milliseconds
+            }, 3600000);
         });
     </script>
 </body>
