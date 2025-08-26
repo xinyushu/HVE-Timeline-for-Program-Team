@@ -432,7 +432,7 @@
                 transform: none;
                 width: auto;
             }
-
+            
             .toggle-controls-btn {
                 position: relative;
                 top: auto;
@@ -440,7 +440,7 @@
                 margin: 20px;
                 display: block;
             }
-
+            
             .edit-mode-indicator {
                 position: relative;
                 top: auto;
@@ -474,7 +474,7 @@
         <div class="header">
             <h1>2025 Q4 HVE Timeline - Program Team Action Guide</h1>
             <p class="subtitle">Real-time tracking for PBDD & BFCM key milestones and AM strategic actions</p>
-
+            
             <div class="purpose-section">
                 <h3>Purpose & Strategic Guidance</h3>
                 <p>This timeline enables Program team Account Managers (AMs) to track real-time key milestones for 2025 Q4 High Volume Events (PBDD & BFCM). The action guidelines represent the minimum required AM activities. AMs can implement additional strategic actions based on sourcing progress, including Manual BD Sourcing, targeted seller outreach, and performance optimization initiatives.</p>
@@ -490,7 +490,7 @@
         <div class="controls-panel" id="controlsPanel">
             <h4 style="color: #232f3e; margin-bottom: 15px;">Editing Controls</h4>
             <p style="font-size: 12px; color: #666; margin-bottom: 15px;">Click any cell to select, then choose a color or edit content directly.</p>
-
+            
             <h5 style="color: #555; margin-bottom: 10px;">Color Palette:</h5>
             <div class="color-palette">
                 <div class="color-option" style="background: #e8f5e8;" onclick="applyColor('#e8f5e8')" title="Light Green"></div>
@@ -502,7 +502,7 @@
                 <div class="color-option" style="background: #ffffff;" onclick="applyColor('#ffffff')" title="White"></div>
                 <div class="color-option" style="background: #f5f5f5;" onclick="applyColor('#f5f5f5')" title="Light Gray"></div>
             </div>
-
+            
             <button onclick="saveData()" style="width: 100%; padding: 10px; background: #232f3e; color: white; border: none; border-radius: 6px; margin-top: 15px; cursor: pointer;">💾 Save Changes</button>
             <button onclick="resetData()" style="width: 100%; padding: 10px; background: #dc3545; color: white; border: none; border-radius: 6px; margin-top: 10px; cursor: pointer;">🔄 Reset to Default</button>
             <button onclick="exitEditMode()" style="width: 100%; padding: 10px; background: #6c757d; color: white; border: none; border-radius: 6px; margin-top: 10px; cursor: pointer;">🔒 Exit Edit Mode</button>
@@ -571,78 +571,68 @@
         let isEditMode = false;
         const EDIT_PASSWORD = 'timeline2025';
 
-        // Auto-calculate current week based on your specification
+        // Auto-calculate current week - SIMPLE METHOD
         function getCurrentWeek() {
             const now = new Date();
-            const currentMonth = now.getMonth() + 1; // 1-12
-            const currentDate = now.getDate();
-
-            // 基于你的明确信息：2025年第35周是8月25日-8月31日
-            // 直接映射当前日期到正确的周数
-
-            let currentWeekNumber = 35; // 默认当前周
-            let weekStartDate = new Date(2025, 7, 25); // Aug 25, 2025
-            let weekEndDate = new Date(2025, 7, 31);   // Aug 31, 2025
-
-            // 8月份的周数映射
-            if (currentMonth === 8) {
-                if (currentDate >= 25 && currentDate <= 31) {
-                    // WK35: 8月25-31日
-                    currentWeekNumber = 35;
-                    weekStartDate = new Date(2025, 7, 25);
-                    weekEndDate = new Date(2025, 7, 31);
-                } else if (currentDate >= 18 && currentDate <= 24) {
-                    // WK34: 8月18-24日
-                    currentWeekNumber = 34;
-                    weekStartDate = new Date(2025, 7, 18);
-                    weekEndDate = new Date(2025, 7, 24);
-                } else if (currentDate >= 11 && currentDate <= 17) {
-                    // WK33: 8月11-17日
-                    currentWeekNumber = 33;
-                    weekStartDate = new Date(2025, 7, 11);
-                    weekEndDate = new Date(2025, 7, 17);
-                } else if (currentDate >= 4 && currentDate <= 10) {
-                    // WK32: 8月4-10日
-                    currentWeekNumber = 32;
-                    weekStartDate = new Date(2025, 7, 4);
-                    weekEndDate = new Date(2025, 7, 10);
-                } else if (currentDate >= 1 && currentDate <= 3) {
-                    // WK31: 7月28日-8月3日
-                    currentWeekNumber = 31;
-                    weekStartDate = new Date(2025, 6, 28);
-                    weekEndDate = new Date(2025, 7, 3);
-                }
-            } else if (currentMonth === 9) {
-                if (currentDate >= 1 && currentDate <= 7) {
-                    // WK36: 9月1-7日
-                    currentWeekNumber = 36;
-                    weekStartDate = new Date(2025, 8, 1);
-                    weekEndDate = new Date(2025, 8, 7);
-                } else if (currentDate >= 8 && currentDate <= 14) {
-                    // WK37: 9月8-14日
-                    currentWeekNumber = 37;
-                    weekStartDate = new Date(2025, 8, 8);
-                    weekEndDate = new Date(2025, 8, 14);
+            const today = now.getTime();
+            
+            // 直接列出每周的日期范围（基于你提供的WK35 = Aug 25-31, 2025）
+            const weekRanges = {
+                26: { start: new Date(2025, 5, 23), end: new Date(2025, 5, 29) },   // Jun 23-29
+                27: { start: new Date(2025, 5, 30), end: new Date(2025, 6, 6) },    // Jun 30 - Jul 6
+                28: { start: new Date(2025, 6, 7), end: new Date(2025, 6, 13) },    // Jul 7-13
+                29: { start: new Date(2025, 6, 14), end: new Date(2025, 6, 20) },   // Jul 14-20
+                30: { start: new Date(2025, 6, 21), end: new Date(2025, 6, 27) },   // Jul 21-27
+                31: { start: new Date(2025, 6, 28), end: new Date(2025, 7, 3) },    // Jul 28 - Aug 3
+                32: { start: new Date(2025, 7, 4), end: new Date(2025, 7, 10) },    // Aug 4-10
+                33: { start: new Date(2025, 7, 11), end: new Date(2025, 7, 17) },   // Aug 11-17
+                34: { start: new Date(2025, 7, 18), end: new Date(2025, 7, 24) },   // Aug 18-24
+                35: { start: new Date(2025, 7, 25), end: new Date(2025, 7, 31) },   // Aug 25-31 ✅
+                36: { start: new Date(2025, 8, 1), end: new Date(2025, 8, 7) },     // Sep 1-7
+                37: { start: new Date(2025, 8, 8), end: new Date(2025, 8, 14) },    // Sep 8-14
+                38: { start: new Date(2025, 8, 15), end: new Date(2025, 8, 21) },   // Sep 15-21
+                39: { start: new Date(2025, 8, 22), end: new Date(2025, 8, 28) },   // Sep 22-28
+                40: { start: new Date(2025, 8, 29), end: new Date(2025, 9, 5) },    // Sep 29 - Oct 5
+                41: { start: new Date(2025, 9, 6), end: new Date(2025, 9, 12) },    // Oct 6-12
+                42: { start: new Date(2025, 9, 13), end: new Date(2025, 9, 19) },   // Oct 13-19
+                43: { start: new Date(2025, 9, 20), end: new Date(2025, 9, 26) },   // Oct 20-26
+                44: { start: new Date(2025, 9, 27), end: new Date(2025, 10, 2) },   // Oct 27 - Nov 2
+                45: { start: new Date(2025, 10, 3), end: new Date(2025, 10, 9) },   // Nov 3-9
+                46: { start: new Date(2025, 10, 10), end: new Date(2025, 10, 16) }, // Nov 10-16
+                47: { start: new Date(2025, 10, 17), end: new Date(2025, 10, 23) }, // Nov 17-23
+                48: { start: new Date(2025, 10, 24), end: new Date(2025, 10, 30) }, // Nov 24-30
+                49: { start: new Date(2025, 11, 1), end: new Date(2025, 11, 7) }    // Dec 1-7
+            };
+            
+            // 找到今天属于哪一周
+            let currentWeekNumber = 35; // 默认值
+            let weekStart = weekRanges[35].start;
+            let weekEnd = weekRanges[35].end;
+            
+            for (let week = 26; week <= 49; week++) {
+                const range = weekRanges[week];
+                if (today >= range.start.getTime() && today <= range.end.getTime()) {
+                    currentWeekNumber = week;
+                    weekStart = range.start;
+                    weekEnd = range.end;
+                    break;
                 }
             }
-
+            
             // 格式化日期
             const formatDate = (date) => {
                 const months = ['January', 'February', 'March', 'April', 'May', 'June',
                               'July', 'August', 'September', 'October', 'November', 'December'];
                 return `${months[date.getMonth()]} ${date.getDate()}`;
             };
-
-            // 计算在时间线表格中的索引位置
-            let headerIndex = -1;
-            if (currentWeekNumber >= 26 && currentWeekNumber <= 49) {
-                headerIndex = currentWeekNumber - 24; // WK26对应索引2
-            }
-
+            
+            // 计算表格索引
+            const headerIndex = currentWeekNumber - 24; // WK26对应索引2
+            
             return {
                 weekNumber: currentWeekNumber,
                 weekName: `WK${currentWeekNumber}`,
-                dateRange: `${formatDate(weekStartDate)} - ${formatDate(weekEndDate)}, 2025`,
+                dateRange: `${formatDate(weekStart)} - ${formatDate(weekEnd)}, 2025`,
                 headerIndex: headerIndex
             };
         }
@@ -650,11 +640,11 @@
         function updateCurrentWeekDisplay() {
             const currentWeek = getCurrentWeek();
             const currentWeekText = document.getElementById('currentWeekText');
-
+            
             if (currentWeekText) {
                 currentWeekText.textContent = `Current Week: ${currentWeek.weekName} (${currentWeek.dateRange})`;
             }
-
+            
             return currentWeek;
         }
 
@@ -681,7 +671,7 @@
         function checkPassword() {
             const password = document.getElementById('passwordInput').value;
             const errorDiv = document.getElementById('authError');
-
+            
             if (password === EDIT_PASSWORD) {
                 enableEditMode();
                 document.getElementById('authOverlay').style.display = 'none';
@@ -702,7 +692,7 @@
             document.body.classList.remove('readonly-mode');
             document.getElementById('editModeIndicator').classList.add('show');
             document.getElementById('toggleControlsBtn').classList.remove('hidden');
-
+            
             document.querySelectorAll('.editable-content').forEach(cell => {
                 cell.contentEditable = true;
             });
@@ -714,12 +704,12 @@
             document.getElementById('editModeIndicator').classList.remove('show');
             document.getElementById('toggleControlsBtn').classList.add('hidden');
             document.getElementById('controlsPanel').classList.remove('show');
-
+            
             document.querySelectorAll('.editable-content').forEach(cell => {
                 cell.contentEditable = false;
                 cell.classList.remove('selected');
             });
-
+            
             selectedCell = null;
         }
 
@@ -739,7 +729,7 @@
             timelineData.forEach(marketData => {
                 const sourcingRow = document.createElement('tr');
                 sourcingRow.className = 'sourcing-progress-row';
-
+                
                 const marketplaceCell = document.createElement('td');
                 marketplaceCell.className = 'marketplace-cell';
                 marketplaceCell.rowSpan = 2;
@@ -754,18 +744,18 @@
                 marketData.sourcingProgress.forEach((content, index) => {
                     const cell = document.createElement('td');
                     cell.setAttribute('data-week-index', index + 2);
-
+                    
                     const editableDiv = document.createElement('div');
                     editableDiv.className = 'editable-content';
                     editableDiv.contentEditable = false;
                     editableDiv.innerHTML = content.replace(/\n/g, '<br>');
-
+                    
                     if (content.includes('PBDD (FCST)')) {
                         cell.classList.add('pbdd-highlight');
                     } else if (content.includes('BFCM (FCST)')) {
                         cell.classList.add('bfcm-highlight');
                     }
-
+                    
                     cell.appendChild(editableDiv);
                     sourcingRow.appendChild(cell);
                 });
@@ -783,12 +773,12 @@
                 marketData.amAction.forEach((content, index) => {
                     const cell = document.createElement('td');
                     cell.setAttribute('data-week-index', index + 2);
-
+                    
                     const editableDiv = document.createElement('div');
                     editableDiv.className = 'editable-content';
                     editableDiv.contentEditable = false;
                     editableDiv.innerHTML = content.replace(/\n/g, '<br>');
-
+                    
                     cell.appendChild(editableDiv);
                     actionRow.appendChild(cell);
                 });
@@ -802,20 +792,20 @@
             const currentWeek = getCurrentWeek();
             const currentWeekHeaderIndex = currentWeek.headerIndex;
             const table = document.getElementById('timelineTable');
-
+            
             document.querySelectorAll('.current-week-header').forEach(el => {
                 el.classList.remove('current-week-header');
             });
             document.querySelectorAll('.current-week-column').forEach(el => {
                 el.classList.remove('current-week-column');
             });
-
+            
             if (currentWeekHeaderIndex >= 2 && currentWeekHeaderIndex <= 21) {
                 const headerRow = table.querySelector('thead tr');
                 if (headerRow && headerRow.cells[currentWeekHeaderIndex]) {
                     headerRow.cells[currentWeekHeaderIndex].classList.add('current-week-header');
                 }
-
+                
                 const dataCells = table.querySelectorAll('td[data-week-index]');
                 dataCells.forEach(cell => {
                     const weekIndex = parseInt(cell.getAttribute('data-week-index'));
@@ -871,11 +861,11 @@
 
         function saveData() {
             if (!isEditMode) return;
-
+            
             const table = document.getElementById('timelineTable');
             const data = [];
             const rows = table.querySelectorAll('tbody tr');
-
+            
             rows.forEach(row => {
                 const rowData = [];
                 const cells = row.querySelectorAll('td');
@@ -890,9 +880,9 @@
                 });
                 data.push(rowData);
             });
-
+            
             localStorage.setItem('timelineData_protected', JSON.stringify(data));
-
+            
             const saveBtn = document.querySelector('button[onclick="saveData()"]');
             if (saveBtn) {
                 const originalText = saveBtn.textContent;
@@ -911,7 +901,7 @@
                 const data = JSON.parse(savedData);
                 const table = document.getElementById('timelineTable');
                 const rows = table.querySelectorAll('tbody tr');
-
+                
                 data.forEach((rowData, rowIndex) => {
                     if (rows[rowIndex]) {
                         const cells = rows[rowIndex].querySelectorAll('td');
@@ -921,7 +911,7 @@
                                 if (editableContent) {
                                     editableContent.innerHTML = cellData.content;
                                 }
-
+                                
                                 if (cellData.backgroundColor) {
                                     cells[cellIndex].style.backgroundColor = cellData.backgroundColor;
                                 }
@@ -940,7 +930,7 @@
                 alert('Please enable edit mode first to reset data.');
                 return;
             }
-
+            
             if (confirm('Are you sure you want to reset all changes? This cannot be undone.')) {
                 localStorage.removeItem('timelineData_protected');
                 initializeTable();
@@ -956,12 +946,12 @@
             if (e.target.id === 'passwordInput' && e.key === 'Enter') {
                 checkPassword();
             }
-
+            
             if (e.ctrlKey && e.key === 's' && isEditMode) {
                 e.preventDefault();
                 saveData();
             }
-
+            
             if (e.key === 'Escape') {
                 const panel = document.getElementById('controlsPanel');
                 if (panel) {
@@ -982,7 +972,7 @@
             highlightCurrentWeek();
             loadData();
             setReadOnlyMode();
-
+            
             setInterval(() => {
                 updateCurrentWeekDisplay();
                 highlightCurrentWeek();
