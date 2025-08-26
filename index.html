@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025 Q4 HVE Timeline - Program Team Action Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #232f3e 0%, #37475a 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            font-weight: 300;
+            letter-spacing: -1px;
+        }
+
+        .header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+            margin-bottom: 25px;
+            font-weight: 300;
+        }
+
+        .purpose-section {
+            background: #fff3cd;
+            border: 2px solid #ff9900;
+            border-left: 5px solid #ff9900;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .purpose-section h3 {
+            color: #232f3e;
+            margin-bottom: 12px;
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+
+        .purpose-section p {
+            color: #333;
+            line-height: 1.7;
+            font-size: 1em;
+            font-weight: 500;
+        }
+
+        /* Password Protection Styles */
+        .auth-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(35, 47, 62, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        }
+
+        .auth-modal {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .auth-modal h3 {
+            color: #232f3e;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .auth-modal p {
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .auth-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            transition: border-color 0.3s ease;
+        }
+
+        .auth-input:focus {
+            outline: none;
+            border-color: #ff9900;
+        }
+
+        .auth-button {
+            background: linear-gradient(135deg, #ff9900 0%, #ffb84d 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            margin-right: 10px;
+        }
+
+        .auth-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .auth-button.secondary {
+            background: #6c757d;
+        }
+
+        .auth-error {
+            color: #dc3545;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .edit-mode-indicator {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: linear-gradient(135deg, #28a745 0%, #34ce57 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 1001;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+            display: none;
+        }
+
+        .edit-mode-indicator.show {
+            display: block;
+        }
+
+        .readonly-mode .editable-content {
+            cursor: default !important;
+            pointer-events: none;
+        }
+
+        .readonly-mode .editable-content:hover {
+            background: transparent !important;
+            box-shadow: none !important;
+        }
+
+        .current-week-banner {
+            background: linear-gradient(135deg, #ff9900 0%, #ffb84d 100%);
+            color: white;
+            padding: 15px 30px;
+            margin: 25px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.1em;
+            box-shadow: 0 8px 25px rgba(255, 153, 0, 0.3);
+        }
+
+        .controls-panel {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            width: 280px;
+        }
+
+        .controls-panel.show {
+            transform: translateX(0);
+        }
+
+        .toggle-controls-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #ff9900 0%, #ffb84d 100%);
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            z-index: 999;
+            box-shadow: 0 4px 15px rgba(255, 153, 0, 0.3);
+        }
+
+        .toggle-controls-btn.hidden {
+            display: none;
+        }
+
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .color-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .color-option:hover {
+            transform: scale(1.1);
+            border-color: #232f3e;
+        }
+
+        .table-wrapper {
+            padding: 30px;
+            overflow-x: auto;
+        }
+
+        .timeline-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .timeline-table th {
+            background: linear-gradient(135deg, #232f3e 0%, #37475a 100%);
+            color: white;
+            padding: 18px 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 12px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .timeline-table th.header-marketplace {
+            background: linear-gradient(135deg, #ff9900 0%, #ffb84d 100%);
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .timeline-table td {
+            padding: 15px 12px;
+            border: 1px solid #e8eef5;
+            text-align: left;
+            vertical-align: top;
+            line-height: 1.5;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .marketplace-cell {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            font-weight: 700;
+            color: #232f3e;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 15px;
+            border-right: 3px solid #ff9900;
+        }
+
+        .action-type-cell {
+            background: linear-gradient(135deg, #f1f3f4 0%, #e8eaed 100%);
+            font-weight: 600;
+            color: #555;
+            font-size: 13px;
+            width: 140px;
+            border-right: 2px solid #ddd;
+        }
+
+        .sourcing-progress-row {
+            background: linear-gradient(135deg, rgba(52, 168, 83, 0.08) 0%, rgba(52, 168, 83, 0.04) 100%);
+        }
+
+        .am-action-row {
+            background: linear-gradient(135deg, rgba(66, 133, 244, 0.08) 0%, rgba(66, 133, 244, 0.04) 100%);
+        }
+
+        .current-week-column {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%) !important;
+            border-left: 4px solid #ff9900 !important;
+            border-right: 4px solid #ff9900 !important;
+            box-shadow: inset 0 0 10px rgba(255, 153, 0, 0.2);
+        }
+
+        .current-week-header {
+            position: relative;
+        }
+
+        .current-week-header::after {
+            content: "CURRENT";
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ff9900;
+            color: white;
+            padding: 2px 6px;
+            font-size: 9px;
+            font-weight: bold;
+            border-radius: 4px;
+            z-index: 5;
+        }
+
+        .pbdd-highlight {
+            background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%) !important;
+            border: 2px solid #4caf50 !important;
+            font-weight: 700;
+            color: #2e7d32;
+        }
+
+        .bfcm-highlight {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffcc02 100%) !important;
+            border: 2px solid #ff9800 !important;
+            font-weight: 700;
+            color: #e65100;
+        }
+
+        .editable-content {
+            min-height: 25px;
+            padding: 6px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            cursor: text;
+            outline: none;
+        }
+
+        .editable-content:hover {
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .editable-content:focus {
+            outline: 2px solid #ff9900;
+            background: white;
+            box-shadow: 0 4px 15px rgba(255, 153, 0, 0.2);
+        }
+
+        .editable-content.selected {
+            outline: 3px solid #ff9900;
+            background: white;
+            box-shadow: 0 4px 15px rgba(255, 153, 0, 0.3);
+        }
+
+        .legend-panel {
+            margin: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            border-left: 5px solid #232f3e;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .legend-panel h4 {
+            color: #232f3e;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+
+        .legend-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .legend-color {
+            width: 25px;
+            height: 18px;
+            margin-right: 12px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        @media (max-width: 1024px) {
+            .controls-panel {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin: 20px;
+                transform: none;
+                width: auto;
+            }
+            
+            .toggle-controls-btn {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin: 20px;
+                display: block;
+            }
+            
+            .edit-mode-indicator {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Password Protection Overlay -->
+    <div class="auth-overlay" id="authOverlay">
+        <div class="auth-modal">
+            <h3>🔒 Edit Access Required</h3>
+            <p>This timeline is view-only. Enter the password to enable editing mode.</p>
+            <input type="password" class="auth-input" id="passwordInput" placeholder="Enter password">
+            <div>
+                <button class="auth-button" onclick="checkPassword()">🔓 Enable Editing</button>
+                <button class="auth-button secondary" onclick="enterViewMode()">👁️ View Only</button>
+            </div>
+            <div class="auth-error" id="authError"></div>
+        </div>
+    </div>
+
+    <!-- Edit Mode Indicator -->
+    <div class="edit-mode-indicator" id="editModeIndicator">
+        ✏️ Edit Mode Active - You can modify content
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>2025 Q4 HVE Timeline - Program Team Action Guide</h1>
+            <p class="subtitle">Real-time tracking for PBDD & BFCM key milestones and AM strategic actions</p>
+            
+            <div class="purpose-section">
+                <h3>Purpose & Strategic Guidance</h3>
+                <p>This timeline enables Program team Account Managers (AMs) to track real-time key milestones for 2025 Q4 High Volume Events (PBDD & BFCM). The action guidelines represent the minimum required AM activities. AMs can implement additional strategic actions based on sourcing progress, including Manual BD Sourcing, targeted seller outreach, and performance optimization initiatives.</p>
+            </div>
+        </div>
+
+        <div class="current-week-banner" id="currentWeekBanner">
+            <span id="currentWeekText">Current Week: WK34 (August 19-25, 2024)</span>
+        </div>
+
+        <button class="toggle-controls-btn" id="toggleControlsBtn" onclick="toggleControls()">🎨 Customize & Edit</button>
+
+        <div class="controls-panel" id="controlsPanel">
+            <h4 style="color: #232f3e; margin-bottom: 15px;">Editing Controls</h4>
+            <p style="font-size: 12px; color: #666; margin-bottom: 15px;">Click any cell to select, then choose a color or edit content directly.</p>
+            
+            <h5 style="color: #555; margin-bottom: 10px;">Color Palette:</h5>
+            <div class="color-palette">
+                <div class="color-option" style="background: #e8f5e8;" onclick="applyColor('#e8f5e8')" title="Light Green"></div>
+                <div class="color-option" style="background: #fff3e0;" onclick="applyColor('#fff3e0')" title="Light Orange"></div>
+                <div class="color-option" style="background: #e3f2fd;" onclick="applyColor('#e3f2fd')" title="Light Blue"></div>
+                <div class="color-option" style="background: #fce4ec;" onclick="applyColor('#fce4ec')" title="Light Pink"></div>
+                <div class="color-option" style="background: #f3e5f5;" onclick="applyColor('#f3e5f5')" title="Light Purple"></div>
+                <div class="color-option" style="background: #fff8e1;" onclick="applyColor('#fff8e1')" title="Light Yellow"></div>
+                <div class="color-option" style="background: #ffffff;" onclick="applyColor('#ffffff')" title="White"></div>
+                <div class="color-option" style="background: #f5f5f5;" onclick="applyColor('#f5f5f5')" title="Light Gray"></div>
+            </div>
+            
+            <button onclick="saveData()" style="width: 100%; padding: 10px; background: #232f3e; color: white; border: none; border-radius: 6px; margin-top: 15px; cursor: pointer;">💾 Save Changes</button>
+            <button onclick="resetData()" style="width: 100%; padding: 10px; background: #dc3545; color: white; border: none; border-radius: 6px; margin-top: 10px; cursor: pointer;">🔄 Reset to Default</button>
+            <button onclick="exitEditMode()" style="width: 100%; padding: 10px; background: #6c757d; color: white; border: none; border-radius: 6px; margin-top: 10px; cursor: pointer;">🔒 Exit Edit Mode</button>
+        </div>
+
+        <div class="legend-panel">
+            <h4>Legend & Color Guide</h4>
+            <div class="legend-grid">
+                <div class="legend-item">
+                    <span class="legend-color sourcing-progress-row"></span>
+                    Sourcing Progress Activities
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color am-action-row"></span>
+                    AM Action Requirements
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color pbdd-highlight"></span>
+                    PBDD (FCST) Events
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color bfcm-highlight"></span>
+                    BFCM (FCST) Events
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color current-week-column"></span>
+                    Current Week Highlight
+                </div>
+            </div>
+        </div>
+
+        <div class="table-wrapper">
+            <table class="timeline-table" id="timelineTable">
+                <thead>
+                    <tr>
+                        <th class="header-marketplace">Marketplace</th>
+                        <th class="header-marketplace">Activity Type</th>
+                        <th>WK26</th>
+                        <th>WK27-WK32</th>
+                        <th>WK33</th>
+                        <th>WK34</th>
+                        <th>WK35</th>
+                        <th>WK36</th>
+                        <th>WK37</th>
+                        <th>WK38</th>
+                        <th>WK39</th>
+                        <th>WK40</th>
+                        <th>WK41</th>
+                        <th>WK42</th>
+                        <th>WK43</th>
+                        <th>WK44</th>
+                        <th>WK45</th>
+                        <th>WK46</th>
+                        <th>WK47</th>
+                        <th>WK48</th>
+                        <th>WK49</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let selectedCell = null;
+        let isEditMode = false;
+        const EDIT_PASSWORD = 'timeline2025'; // Change this password as needed
+
+        // Updated timeline data from latest CSV
+        const timelineData = [
+            {
+                marketplace: 'US',
+                sourcingProgress: ['PBDD/BFCM BD/LD Sourcing Open', '', '', 'PBDD PED OPEN', '', '', 'PBDD BD/LD Sourcing Close', 'FBA Cut Off', '', '', 'PBDD (FCST)', '', '', '1. BFCM BD/LD Sourcing Close\n2. FBA Cut Off', '', '', 'BFCM (FCST)', '', ''],
+                amAction: ['', '', 'BD/LD Sourcing with Wechat Post by WeCom', 'share PBDD/BFCM pitch deck by mass email', '', 'PBDD BD/LD Last drive', 'PED Sourcing by Wecom & mass email', '', '', '', '', '', 'BFCM BD/LD Last drive', 'BFCM PED Sourcing by Wecom & mass email', '', '', '', '', '']
+            },
+            {
+                marketplace: 'EU',
+                sourcingProgress: ['PBDD/BFCM BD/LD Sourcing Open', '', '', 'PBDD PED OPEN', '', 'PBDD BD/LD Sourcing Close', '', 'FBA Cut Off', '', '', 'PBDD (FCST)', '', 'BFCM BD/LD Sourcing Close', 'FBA Cut Off', '', '', 'BFCM (FCST)', '', ''],
+                amAction: ['', '', 'BD/LD Sourcing with Wechat Post by WeCom', 'share PBDD/BFCM pitch deck by mass email', 'PBDD BD/LD Last drive', 'PED Sourcing by Wecom & mass email', '', '', '', '', '', 'BFCM BD/LD Last drive', 'BFCM PED Sourcing by Wecom & mass email', '', '', '', '', '', '']
+            },
+            {
+                marketplace: 'JP',
+                sourcingProgress: ['PBDD/BFCM BD/LD Sourcing Open', '', '', 'PBDD PED OPEN', '', '', '', '1. PBDD Points Deal Sourcing Open\n2. BFCM PED OPEN', '1. PBDD BD/LD Sourcing Close\n2. FBA Cut Off', '', 'PBDD (FCST)', '', '', '', 'BFCM Points Deal/Coupon Sourcing Open', '1. PBDD BD/LD Sourcing Close\n2. FBA Cut Off', 'BFCM (FCST)', '', ''],
+                amAction: ['', '', 'BD/LD Sourcing with Wechat Post by WeCom', 'share PBDD/BFCM pitch deck by mass email', '', '', 'PBDD BD/LD Last drive', 'PED/Points Deal Sourcing by Wecom & mass email', '', '', '', '', '', 'BFCM BD/LD Last drive', 'BFCM PED/Points Deal Sourcing by Wecom & mass email', '', '', '', '']
+            }
+        ];
+
+        // Password protection functions
+        function checkPassword() {
+            const password = document.getElementById('passwordInput').value;
+            const errorDiv = document.getElementById('authError');
+            
+            if (password === EDIT_PASSWORD) {
+                enableEditMode();
+                document.getElementById('authOverlay').style.display = 'none';
+                errorDiv.textContent = '';
+            } else {
+                errorDiv.textContent = 'Incorrect password. Please try again.';
+                document.getElementById('passwordInput').value = '';
+            }
+        }
+
+        function enterViewMode() {
+            document.getElementById('authOverlay').style.display = 'none';
+            setReadOnlyMode();
+        }
+
+        function enableEditMode() {
+            isEditMode = true;
+            document.body.classList.remove('readonly-mode');
+            document.getElementById('editModeIndicator').classList.add('show');
+            document.getElementById('toggleControlsBtn').classList.remove('hidden');
+            
+            // Enable contentEditable for all editable content
+            document.querySelectorAll('.editable-content').forEach(cell => {
+                cell.contentEditable = true;
+            });
+        }
+
+        function setReadOnlyMode() {
+            isEditMode = false;
+            document.body.classList.add('readonly-mode');
+            document.getElementById('editModeIndicator').classList.remove('show');
+            document.getElementById('toggleControlsBtn').classList.add('hidden');
+            document.getElementById('controlsPanel').classList.remove('show');
+            
+            // Disable contentEditable for all editable content
+            document.querySelectorAll('.editable-content').forEach(cell => {
+                cell.contentEditable = false;
+                cell.classList.remove('selected');
+            });
+            
+            selectedCell = null;
+        }
+
+        function exitEditMode() {
+            if (confirm('Are you sure you want to exit edit mode? You will need to enter the password again to edit.')) {
+                setReadOnlyMode();
+                document.getElementById('authOverlay').style.display = 'flex';
+                document.getElementById('passwordInput').value = '';
+                document.getElementById('authError').textContent = '';
+            }
+        }
+
+        // Initialize table with data
+        function initializeTable() {
+            const tbody = document.querySelector('#timelineTable tbody');
+            tbody.innerHTML = '';
+
+            timelineData.forEach(marketData => {
+                // Sourcing Progress Row
+                const sourcingRow = document.createElement('tr');
+                sourcingRow.className = 'sourcing-progress-row';
+                
+                // Marketplace cell (rowspan 2)
+                const marketplaceCell = document.createElement('td');
+                marketplaceCell.className = 'marketplace-cell';
+                marketplaceCell.rowSpan = 2;
+                marketplaceCell.textContent = marketData.marketplace;
+                sourcingRow.appendChild(marketplaceCell);
+
+                // Action type cell
+                const sourcingTypeCell = document.createElement('td');
+                sourcingTypeCell.className = 'action-type-cell';
+                sourcingTypeCell.textContent = 'Sourcing Progress';
+                sourcingRow.appendChild(sourcingTypeCell);
+
+                // Data cells for Sourcing Progress
+                marketData.sourcingProgress.forEach((content, index) => {
+                    const cell = document.createElement('td');
+                    cell.setAttribute('data-week-index', index + 2);
+                    
+                    const editableDiv = document.createElement('div');
+                    editableDiv.className = 'editable-content';
+                    editableDiv.contentEditable = false; // Start in readonly mode
+                    editableDiv.innerHTML = content.replace(/\n/g, '<br>');
+                    
+                    // Add special highlighting for PBDD and BFCM
+                    if (content.includes('PBDD (FCST)')) {
+                        cell.classList.add('pbdd-highlight');
+                    } else if (content.includes('BFCM (FCST)')) {
+                        cell.classList.add('bfcm-highlight');
+                    }
+                    
+                    cell.appendChild(editableDiv);
+                    sourcingRow.appendChild(cell);
+                });
+
+                tbody.appendChild(sourcingRow);
+
+                // AM Action Row
+                const actionRow = document.createElement('tr');
+                actionRow.className = 'am-action-row';
+
+                // Action type cell (no marketplace cell due to rowspan)
+                const actionTypeCell = document.createElement('td');
+                actionTypeCell.className = 'action-type-cell';
+                actionTypeCell.textContent = 'AM Action';
+                actionRow.appendChild(actionTypeCell);
+
+                // Data cells for AM Action
+                marketData.amAction.forEach((content, index) => {
+                    const cell = document.createElement('td');
+                    cell.setAttribute('data-week-index', index + 2);
+                    
+                    const editableDiv = document.createElement('div');
+                    editableDiv.className = 'editable-content';
+                    editableDiv.contentEditable = false; // Start in readonly mode
+                    editableDiv.innerHTML = content.replace(/\n/g, '<br>');
+                    
+                    cell.appendChild(editableDiv);
+                    actionRow.appendChild(cell);
+                });
+
+                tbody.appendChild(actionRow);
+            });
+        }
+
+        // Highlight current week
+        function highlightCurrentWeek() {
+            const wk34HeaderIndex = 5;
+            const table = document.getElementById('timelineTable');
+            
+            // Highlight header
+            const headerRow = table.querySelector('thead tr');
+            if (headerRow && headerRow.cells[wk34HeaderIndex]) {
+                headerRow.cells[wk34HeaderIndex].classList.add('current-week-header');
+            }
+            
+            // Highlight data cells using data-week-index attribute
+            const dataCells = table.querySelectorAll('td[data-week-index]');
+            dataCells.forEach(cell => {
+                const weekIndex = parseInt(cell.getAttribute('data-week-index'));
+                if (weekIndex === wk34HeaderIndex) {
+                    cell.classList.add('current-week-column');
+                }
+            });
+        }
+
+        // Setup cell selection and editing (only in edit mode)
+        function setupCellInteraction() {
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('editable-content') && isEditMode) {
+                    // Remove selection from other cells
+                    document.querySelectorAll('.editable-content').forEach(c => c.classList.remove('selected'));
+                    
+                    // Select current cell
+                    e.target.classList.add('selected');
+                    selectedCell = e.target;
+                    e.stopPropagation();
+                } else {
+                    // Deselect when clicking outside
+                    if (selectedCell) {
+                        selectedCell.classList.remove('selected');
+                        selectedCell = null;
+                    }
+                }
+            });
+
+            // Auto-save on content change (only in edit mode)
+            document.addEventListener('input', function(e) {
+                if (e.target.classList.contains('editable-content') && isEditMode) {
+                    saveData();
+                }
+            });
+        }
+
+        // Toggle controls panel (only in edit mode)
+        function toggleControls() {
+            if (isEditMode) {
+                const panel = document.getElementById('controlsPanel');
+                panel.classList.toggle('show');
+            }
+        }
+
+        // Apply color to selected cell (only in edit mode)
+        function applyColor(color) {
+            if (selectedCell && isEditMode) {
+                const parentCell = selectedCell.parentElement;
+                parentCell.style.backgroundColor = color;
+                parentCell.style.border = `2px solid ${color === '#ffffff' ? '#ddd' : color}`;
+                saveData();
+            } else if (!isEditMode) {
+                alert('Please enable edit mode first to modify colors.');
+            } else {
+                alert('Please select a cell first by clicking on it.');
+            }
+        }
+
+        // Save data to localStorage (only in edit mode)
+        function saveData() {
+            if (!isEditMode) return;
+            
+            const table = document.getElementById('timelineTable');
+            const data = [];
+            const rows = table.querySelectorAll('tbody tr');
+            
+            rows.forEach(row => {
+                const rowData = [];
+                const cells = row.querySelectorAll('td');
+                cells.forEach(cell => {
+                    const editableContent = cell.querySelector('.editable-content');
+                    rowData.push({
+                        content: editableContent ? editableContent.innerHTML : cell.innerHTML,
+                        backgroundColor: cell.style.backgroundColor,
+                        border: cell.style.border,
+                        className: cell.className
+                    });
+                });
+                data.push(rowData);
+            });
+            
+            localStorage.setItem('timelineData_protected', JSON.stringify(data));
+            
+            // Show save confirmation
+            const saveBtn = document.querySelector('button[onclick="saveData()"]');
+            if (saveBtn) {
+                const originalText = saveBtn.textContent;
+                saveBtn.textContent = '✅ Saved!';
+                saveBtn.style.background = '#28a745';
+                setTimeout(() => {
+                    saveBtn.textContent = originalText;
+                    saveBtn.style.background = '#232f3e';
+                }, 2000);
+            }
+        }
+
+        // Load data from localStorage
+        function loadData() {
+            const savedData = localStorage.getItem('timelineData_protected');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                const table = document.getElementById('timelineTable');
+                const rows = table.querySelectorAll('tbody tr');
+                
+                data.forEach((rowData, rowIndex) => {
+                    if (rows[rowIndex]) {
+                        const cells = rows[rowIndex].querySelectorAll('td');
+                        rowData.forEach((cellData, cellIndex) => {
+                            if (cells[cellIndex]) {
+                                const editableContent = cells[cellIndex].querySelector('.editable-content');
+                                if (editableContent) {
+                                    editableContent.innerHTML = cellData.content;
+                                }
+                                
+                                if (cellData.backgroundColor) {
+                                    cells[cellIndex].style.backgroundColor = cellData.backgroundColor;
+                                }
+                                if (cellData.border) {
+                                    cells[cellIndex].style.border = cellData.border;
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        }
+
+        // Reset to original data (only in edit mode)
+        function resetData() {
+            if (!isEditMode) {
+                alert('Please enable edit mode first to reset data.');
+                return;
+            }
+            
+            if (confirm('Are you sure you want to reset all changes? This cannot be undone.')) {
+                localStorage.removeItem('timelineData_protected');
+                initializeTable();
+                highlightCurrentWeek();
+                if (isEditMode) {
+                    enableEditMode(); // Re-enable editing after reset
+                }
+            }
+        }
+
+        // Handle Enter key in password input
+        document.addEventListener('keydown', function(e) {
+            if (e.target.id === 'passwordInput' && e.key === 'Enter') {
+                checkPassword();
+            }
+            
+            if (e.ctrlKey && e.key === 's' && isEditMode) {
+                e.preventDefault();
+                saveData();
+            }
+            
+            if (e.key === 'Escape') {
+                const panel = document.getElementById('controlsPanel');
+                if (panel) {
+                    panel.classList.remove('show');
+                }
+                if (selectedCell) {
+                    selectedCell.classList.remove('selected');
+                    selectedCell = null;
+                }
+            }
+        });
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeTable();
+            setupCellInteraction();
+            highlightCurrentWeek();
+            loadData();
+            setReadOnlyMode(); // Start in readonly mode
+        });
+    </script>
+</body>
+</html>
