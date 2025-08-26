@@ -575,32 +575,32 @@
         function getCurrentWeek() {
             const now = new Date();
 
-            // Define specific week start dates for accuracy
+            // Define specific week start dates for 2025
             const weekDates = {
-                26: new Date(2024, 5, 24),  // June 24, 2024
-                27: new Date(2024, 6, 1),   // July 1, 2024
-                28: new Date(2024, 6, 8),   // July 8, 2024
-                29: new Date(2024, 6, 15),  // July 15, 2024
-                30: new Date(2024, 6, 22),  // July 22, 2024
-                31: new Date(2024, 6, 29),  // July 29, 2024
-                32: new Date(2024, 7, 5),   // August 5, 2024
-                33: new Date(2024, 7, 12),  // August 12, 2024
-                34: new Date(2024, 7, 19),  // August 19, 2024
-                35: new Date(2024, 7, 26),  // August 26, 2024
-                36: new Date(2024, 8, 2),   // September 2, 2024
-                37: new Date(2024, 8, 9),   // September 9, 2024
-                38: new Date(2024, 8, 16),  // September 16, 2024
-                39: new Date(2024, 8, 23),  // September 23, 2024
-                40: new Date(2024, 8, 30),  // September 30, 2024
-                41: new Date(2024, 9, 7),   // October 7, 2024
-                42: new Date(2024, 9, 14),  // October 14, 2024
-                43: new Date(2024, 9, 21),  // October 21, 2024
-                44: new Date(2024, 9, 28),  // October 28, 2024
-                45: new Date(2024, 10, 4),  // November 4, 2024
-                46: new Date(2024, 10, 11), // November 11, 2024
-                47: new Date(2024, 10, 18), // November 18, 2024
-                48: new Date(2024, 10, 25), // November 25, 2024
-                49: new Date(2024, 11, 2)   // December 2, 2024
+                26: new Date(2025, 5, 23),  // June 23, 2025
+                27: new Date(2025, 5, 30),  // June 30, 2025
+                28: new Date(2025, 6, 7),   // July 7, 2025
+                29: new Date(2025, 6, 14),  // July 14, 2025
+                30: new Date(2025, 6, 21),  // July 21, 2025
+                31: new Date(2025, 6, 28),  // July 28, 2025
+                32: new Date(2025, 7, 4),   // August 4, 2025
+                33: new Date(2025, 7, 11),  // August 11, 2025
+                34: new Date(2025, 7, 18),  // August 18, 2025
+                35: new Date(2025, 7, 25),  // August 25, 2025
+                36: new Date(2025, 8, 1),   // September 1, 2025
+                37: new Date(2025, 8, 8),   // September 8, 2025
+                38: new Date(2025, 8, 15),  // September 15, 2025
+                39: new Date(2025, 8, 22),  // September 22, 2025
+                40: new Date(2025, 8, 29),  // September 29, 2025
+                41: new Date(2025, 9, 6),   // October 6, 2025
+                42: new Date(2025, 9, 13),  // October 13, 2025
+                43: new Date(2025, 9, 20),  // October 20, 2025
+                44: new Date(2025, 9, 27),  // October 27, 2025
+                45: new Date(2025, 10, 3),  // November 3, 2025
+                46: new Date(2025, 10, 10), // November 10, 2025
+                47: new Date(2025, 10, 17), // November 17, 2025
+                48: new Date(2025, 10, 24), // November 24, 2025
+                49: new Date(2025, 11, 1)   // December 1, 2025
             };
 
             // Find current week by comparing dates
@@ -634,7 +634,7 @@
             return {
                 weekNumber: currentWeekNum,
                 weekName: `WK${currentWeekNum}`,
-                dateRange: `${formatDate(currentWeekStart)} - ${formatDate(currentWeekEnd)}, 2024`,
+                dateRange: `${formatDate(currentWeekStart)} - ${formatDate(currentWeekEnd)}, 2025`,
                 headerIndex: currentWeekNum - 24 // WK26 is index 2, so WK26-24=2
             };
         }
