@@ -626,8 +626,27 @@
                 return `${months[date.getMonth()]} ${date.getDate()}`;
             };
             
-            // 计算表格索引
-            const headerIndex = currentWeekNumber - 24; // WK26对应索引2
+            // 计算表格索引 - 修正版本
+            let headerIndex = -1;
+            if (currentWeekNumber === 26) headerIndex = 2;
+            else if (currentWeekNumber >= 27 && currentWeekNumber <= 32) headerIndex = 3; // WK27-WK32合并列
+            else if (currentWeekNumber === 33) headerIndex = 4;
+            else if (currentWeekNumber === 34) headerIndex = 5;
+            else if (currentWeekNumber === 35) headerIndex = 6; // WK35列
+            else if (currentWeekNumber === 36) headerIndex = 7;
+            else if (currentWeekNumber === 37) headerIndex = 8;
+            else if (currentWeekNumber === 38) headerIndex = 9;
+            else if (currentWeekNumber === 39) headerIndex = 10;
+            else if (currentWeekNumber === 40) headerIndex = 11;
+            else if (currentWeekNumber === 41) headerIndex = 12;
+            else if (currentWeekNumber === 42) headerIndex = 13;
+            else if (currentWeekNumber === 43) headerIndex = 14;
+            else if (currentWeekNumber === 44) headerIndex = 15;
+            else if (currentWeekNumber === 45) headerIndex = 16;
+            else if (currentWeekNumber === 46) headerIndex = 17;
+            else if (currentWeekNumber === 47) headerIndex = 18;
+            else if (currentWeekNumber === 48) headerIndex = 19;
+            else if (currentWeekNumber === 49) headerIndex = 20;
             
             return {
                 weekNumber: currentWeekNumber,
