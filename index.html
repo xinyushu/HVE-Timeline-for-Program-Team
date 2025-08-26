@@ -432,7 +432,7 @@
                 transform: none;
                 width: auto;
             }
-            
+
             .toggle-controls-btn {
                 position: relative;
                 top: auto;
@@ -440,7 +440,7 @@
                 margin: 20px;
                 display: block;
             }
-            
+
             .edit-mode-indicator {
                 position: relative;
                 top: auto;
@@ -474,7 +474,7 @@
         <div class="header">
             <h1>2025 Q4 HVE Timeline - Program Team Action Guide</h1>
             <p class="subtitle">Real-time tracking for PBDD & BFCM key milestones and AM strategic actions</p>
-            
+
             <div class="purpose-section">
                 <h3>Purpose & Strategic Guidance</h3>
                 <p>This timeline enables Program team Account Managers (AMs) to track real-time key milestones for 2025 Q4 High Volume Events (PBDD & BFCM). The action guidelines represent the minimum required AM activities. AMs can implement additional strategic actions based on sourcing progress, including Manual BD Sourcing, targeted seller outreach, and performance optimization initiatives.</p>
@@ -482,7 +482,7 @@
         </div>
 
         <div class="current-week-banner" id="currentWeekBanner">
-            <span id="currentWeekText">Current Week: WK34 (August 19-25, 2024)</span>
+            <span id="currentWeekText">Loading current week...</span>
         </div>
 
         <button class="toggle-controls-btn" id="toggleControlsBtn" onclick="toggleControls()">🎨 Customize & Edit</button>
@@ -490,7 +490,7 @@
         <div class="controls-panel" id="controlsPanel">
             <h4 style="color: #232f3e; margin-bottom: 15px;">Editing Controls</h4>
             <p style="font-size: 12px; color: #666; margin-bottom: 15px;">Click any cell to select, then choose a color or edit content directly.</p>
-            
+
             <h5 style="color: #555; margin-bottom: 10px;">Color Palette:</h5>
             <div class="color-palette">
                 <div class="color-option" style="background: #e8f5e8;" onclick="applyColor('#e8f5e8')" title="Light Green"></div>
@@ -502,7 +502,7 @@
                 <div class="color-option" style="background: #ffffff;" onclick="applyColor('#ffffff')" title="White"></div>
                 <div class="color-option" style="background: #f5f5f5;" onclick="applyColor('#f5f5f5')" title="Light Gray"></div>
             </div>
-            
+
             <button onclick="saveData()" style="width: 100%; padding: 10px; background: #232f3e; color: white; border: none; border-radius: 6px; margin-top: 15px; cursor: pointer;">💾 Save Changes</button>
             <button onclick="resetData()" style="width: 100%; padding: 10px; background: #dc3545; color: white; border: none; border-radius: 6px; margin-top: 10px; cursor: pointer;">🔄 Reset to Default</button>
             <button onclick="exitEditMode()" style="width: 100%; padding: 10px; background: #6c757d; color: white; border: none; border-radius: 6px; margin-top: 10px; cursor: pointer;">🔒 Exit Edit Mode</button>
@@ -571,6 +571,86 @@
         let isEditMode = false;
         const EDIT_PASSWORD = 'timeline2025'; // Change this password as needed
 
+        // Auto-calculate current week
+        function getCurrentWeek() {
+            const now = new Date();
+
+            // Define specific week start dates for accuracy
+            const weekDates = {
+                26: new Date(2024, 5, 24),  // June 24, 2024
+                27: new Date(2024, 6, 1),   // July 1, 2024
+                28: new Date(2024, 6, 8),   // July 8, 2024
+                29: new Date(2024, 6, 15),  // July 15, 2024
+                30: new Date(2024, 6, 22),  // July 22, 2024
+                31: new Date(2024, 6, 29),  // July 29, 2024
+                32: new Date(2024, 7, 5),   // August 5, 2024
+                33: new Date(2024, 7, 12),  // August 12, 2024
+                34: new Date(2024, 7, 19),  // August 19, 2024
+                35: new Date(2024, 7, 26),  // August 26, 2024
+                36: new Date(2024, 8, 2),   // September 2, 2024
+                37: new Date(2024, 8, 9),   // September 9, 2024
+                38: new Date(2024, 8, 16),  // September 16, 2024
+                39: new Date(2024, 8, 23),  // September 23, 2024
+                40: new Date(2024, 8, 30),  // September 30, 2024
+                41: new Date(2024, 9, 7),   // October 7, 2024
+                42: new Date(2024, 9, 14),  // October 14, 2024
+                43: new Date(2024, 9, 21),  // October 21, 2024
+                44: new Date(2024, 9, 28),  // October 28, 2024
+                45: new Date(2024, 10, 4),  // November 4, 2024
+                46: new Date(2024, 10, 11), // November 11, 2024
+                47: new Date(2024, 10, 18), // November 18, 2024
+                48: new Date(2024, 10, 25), // November 25, 2024
+                49: new Date(2024, 11, 2)   // December 2, 2024
+            };
+
+            // Find current week by comparing dates
+            let currentWeekNum = 26;
+            let currentWeekStart = weekDates[26];
+
+            for (let week = 26; week <= 49; week++) {
+                const weekStart = weekDates[week];
+                const weekEnd = new Date(weekStart.getTime() + 6 * 24 * 60 * 60 * 1000);
+
+                if (now >= weekStart && now <= weekEnd) {
+                    currentWeekNum = week;
+                    currentWeekStart = weekStart;
+                    break;
+                } else if (now >= weekStart) {
+                    currentWeekNum = week;
+                    currentWeekStart = weekStart;
+                }
+            }
+
+            // Calculate the end date of current week
+            const currentWeekEnd = new Date(currentWeekStart.getTime() + 6 * 24 * 60 * 60 * 1000);
+
+            // Format dates
+            const formatDate = (date) => {
+                const months = ['January', 'February', 'March', 'April', 'May', 'June',
+                              'July', 'August', 'September', 'October', 'November', 'December'];
+                return `${months[date.getMonth()]} ${date.getDate()}`;
+            };
+
+            return {
+                weekNumber: currentWeekNum,
+                weekName: `WK${currentWeekNum}`,
+                dateRange: `${formatDate(currentWeekStart)} - ${formatDate(currentWeekEnd)}, 2024`,
+                headerIndex: currentWeekNum - 24 // WK26 is index 2, so WK26-24=2
+            };
+        }
+
+        // Update current week display
+        function updateCurrentWeekDisplay() {
+            const currentWeek = getCurrentWeek();
+            const currentWeekText = document.getElementById('currentWeekText');
+
+            if (currentWeekText) {
+                currentWeekText.textContent = `Current Week: ${currentWeek.weekName} (${currentWeek.dateRange})`;
+            }
+
+            return currentWeek;
+        }
+
         // Updated timeline data from latest CSV
         const timelineData = [
             {
@@ -594,7 +674,7 @@
         function checkPassword() {
             const password = document.getElementById('passwordInput').value;
             const errorDiv = document.getElementById('authError');
-            
+
             if (password === EDIT_PASSWORD) {
                 enableEditMode();
                 document.getElementById('authOverlay').style.display = 'none';
@@ -615,7 +695,7 @@
             document.body.classList.remove('readonly-mode');
             document.getElementById('editModeIndicator').classList.add('show');
             document.getElementById('toggleControlsBtn').classList.remove('hidden');
-            
+
             // Enable contentEditable for all editable content
             document.querySelectorAll('.editable-content').forEach(cell => {
                 cell.contentEditable = true;
@@ -628,13 +708,13 @@
             document.getElementById('editModeIndicator').classList.remove('show');
             document.getElementById('toggleControlsBtn').classList.add('hidden');
             document.getElementById('controlsPanel').classList.remove('show');
-            
+
             // Disable contentEditable for all editable content
             document.querySelectorAll('.editable-content').forEach(cell => {
                 cell.contentEditable = false;
                 cell.classList.remove('selected');
             });
-            
+
             selectedCell = null;
         }
 
@@ -656,7 +736,7 @@
                 // Sourcing Progress Row
                 const sourcingRow = document.createElement('tr');
                 sourcingRow.className = 'sourcing-progress-row';
-                
+
                 // Marketplace cell (rowspan 2)
                 const marketplaceCell = document.createElement('td');
                 marketplaceCell.className = 'marketplace-cell';
@@ -674,19 +754,19 @@
                 marketData.sourcingProgress.forEach((content, index) => {
                     const cell = document.createElement('td');
                     cell.setAttribute('data-week-index', index + 2);
-                    
+
                     const editableDiv = document.createElement('div');
                     editableDiv.className = 'editable-content';
                     editableDiv.contentEditable = false; // Start in readonly mode
                     editableDiv.innerHTML = content.replace(/\n/g, '<br>');
-                    
+
                     // Add special highlighting for PBDD and BFCM
                     if (content.includes('PBDD (FCST)')) {
                         cell.classList.add('pbdd-highlight');
                     } else if (content.includes('BFCM (FCST)')) {
                         cell.classList.add('bfcm-highlight');
                     }
-                    
+
                     cell.appendChild(editableDiv);
                     sourcingRow.appendChild(cell);
                 });
@@ -707,12 +787,12 @@
                 marketData.amAction.forEach((content, index) => {
                     const cell = document.createElement('td');
                     cell.setAttribute('data-week-index', index + 2);
-                    
+
                     const editableDiv = document.createElement('div');
                     editableDiv.className = 'editable-content';
                     editableDiv.contentEditable = false; // Start in readonly mode
                     editableDiv.innerHTML = content.replace(/\n/g, '<br>');
-                    
+
                     cell.appendChild(editableDiv);
                     actionRow.appendChild(cell);
                 });
@@ -721,25 +801,38 @@
             });
         }
 
-        // Highlight current week
+        // Highlight current week (now automatic)
         function highlightCurrentWeek() {
-            const wk34HeaderIndex = 5;
+            const currentWeek = getCurrentWeek();
+            const currentWeekHeaderIndex = currentWeek.headerIndex;
             const table = document.getElementById('timelineTable');
-            
-            // Highlight header
-            const headerRow = table.querySelector('thead tr');
-            if (headerRow && headerRow.cells[wk34HeaderIndex]) {
-                headerRow.cells[wk34HeaderIndex].classList.add('current-week-header');
-            }
-            
-            // Highlight data cells using data-week-index attribute
-            const dataCells = table.querySelectorAll('td[data-week-index]');
-            dataCells.forEach(cell => {
-                const weekIndex = parseInt(cell.getAttribute('data-week-index'));
-                if (weekIndex === wk34HeaderIndex) {
-                    cell.classList.add('current-week-column');
-                }
+
+            // Remove previous current week highlighting
+            document.querySelectorAll('.current-week-header').forEach(el => {
+                el.classList.remove('current-week-header');
             });
+            document.querySelectorAll('.current-week-column').forEach(el => {
+                el.classList.remove('current-week-column');
+            });
+
+            // Only highlight if the current week is within our timeline range (WK26-WK49)
+            if (currentWeekHeaderIndex >= 2 && currentWeekHeaderIndex <= 21) {
+                // Highlight header
+                const headerRow = table.querySelector('thead tr');
+                if (headerRow && headerRow.cells[currentWeekHeaderIndex]) {
+                    headerRow.cells[currentWeekHeaderIndex].classList.add('current-week-header');
+                }
+
+                // Highlight data cells using data-week-index attribute
+                const dataCells = table.querySelectorAll('td[data-week-index]');
+                dataCells.forEach(cell => {
+                    const weekIndex = parseInt(cell.getAttribute('data-week-index'));
+                    if (weekIndex === currentWeekHeaderIndex) {
+                        cell.classList.add('current-week-column');
+                    }
+                });
+            }
+        }
         }
 
         // Setup cell selection and editing (only in edit mode)
@@ -748,7 +841,7 @@
                 if (e.target.classList.contains('editable-content') && isEditMode) {
                     // Remove selection from other cells
                     document.querySelectorAll('.editable-content').forEach(c => c.classList.remove('selected'));
-                    
+
                     // Select current cell
                     e.target.classList.add('selected');
                     selectedCell = e.target;
@@ -795,11 +888,11 @@
         // Save data to localStorage (only in edit mode)
         function saveData() {
             if (!isEditMode) return;
-            
+
             const table = document.getElementById('timelineTable');
             const data = [];
             const rows = table.querySelectorAll('tbody tr');
-            
+
             rows.forEach(row => {
                 const rowData = [];
                 const cells = row.querySelectorAll('td');
@@ -814,9 +907,9 @@
                 });
                 data.push(rowData);
             });
-            
+
             localStorage.setItem('timelineData_protected', JSON.stringify(data));
-            
+
             // Show save confirmation
             const saveBtn = document.querySelector('button[onclick="saveData()"]');
             if (saveBtn) {
@@ -837,7 +930,7 @@
                 const data = JSON.parse(savedData);
                 const table = document.getElementById('timelineTable');
                 const rows = table.querySelectorAll('tbody tr');
-                
+
                 data.forEach((rowData, rowIndex) => {
                     if (rows[rowIndex]) {
                         const cells = rows[rowIndex].querySelectorAll('td');
@@ -847,7 +940,7 @@
                                 if (editableContent) {
                                     editableContent.innerHTML = cellData.content;
                                 }
-                                
+
                                 if (cellData.backgroundColor) {
                                     cells[cellIndex].style.backgroundColor = cellData.backgroundColor;
                                 }
@@ -867,7 +960,7 @@
                 alert('Please enable edit mode first to reset data.');
                 return;
             }
-            
+
             if (confirm('Are you sure you want to reset all changes? This cannot be undone.')) {
                 localStorage.removeItem('timelineData_protected');
                 initializeTable();
@@ -883,12 +976,12 @@
             if (e.target.id === 'passwordInput' && e.key === 'Enter') {
                 checkPassword();
             }
-            
+
             if (e.ctrlKey && e.key === 's' && isEditMode) {
                 e.preventDefault();
                 saveData();
             }
-            
+
             if (e.key === 'Escape') {
                 const panel = document.getElementById('controlsPanel');
                 if (panel) {
@@ -905,9 +998,16 @@
         document.addEventListener('DOMContentLoaded', function() {
             initializeTable();
             setupCellInteraction();
-            highlightCurrentWeek();
+            updateCurrentWeekDisplay(); // Auto-update current week display
+            highlightCurrentWeek(); // Auto-highlight current week
             loadData();
             setReadOnlyMode(); // Start in readonly mode
+
+            // Update current week every hour (optional - for long-running sessions)
+            setInterval(() => {
+                updateCurrentWeekDisplay();
+                highlightCurrentWeek();
+            }, 3600000); // 1 hour = 3600000 milliseconds
         });
     </script>
 </body>
