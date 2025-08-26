@@ -571,62 +571,32 @@
         let isEditMode = false;
         const EDIT_PASSWORD = 'timeline2025';
 
-        // Auto-calculate current week
+        // Auto-calculate current week using ISO week system
         function getCurrentWeek() {
             const now = new Date();
-            const currentMonth = now.getMonth() + 1; // 1-12
-            const currentDate = now.getDate();
 
-            // 基于你的业务周数系统的精确映射
-            // 8月26日应该是WK35
-            let currentWeekNumber = 35; // 默认值
-            let weekStartDate, weekEndDate;
-
-            // 2025年精确的周数映射
-            if (currentMonth === 8) { // August
-                if (currentDate >= 25 && currentDate <= 31) {
-                    currentWeekNumber = 35;
-                    weekStartDate = new Date(2025, 7, 25); // Aug 25
-                    weekEndDate = new Date(2025, 7, 31);   // Aug 31
-                } else if (currentDate >= 18 && currentDate <= 24) {
-                    currentWeekNumber = 34;
-                    weekStartDate = new Date(2025, 7, 18); // Aug 18
-                    weekEndDate = new Date(2025, 7, 24);   // Aug 24
-                } else if (currentDate >= 11 && currentDate <= 17) {
-                    currentWeekNumber = 33;
-                    weekStartDate = new Date(2025, 7, 11); // Aug 11
-                    weekEndDate = new Date(2025, 7, 17);   // Aug 17
-                } else if (currentDate >= 4 && currentDate <= 10) {
-                    currentWeekNumber = 32;
-                    weekStartDate = new Date(2025, 7, 4);  // Aug 4
-                    weekEndDate = new Date(2025, 7, 10);   // Aug 10
-                } else if (currentDate >= 1 && currentDate <= 3) {
-                    currentWeekNumber = 31;
-                    weekStartDate = new Date(2025, 6, 28); // Jul 28
-                    weekEndDate = new Date(2025, 7, 3);    // Aug 3
-                }
-            } else if (currentMonth === 9) { // September
-                if (currentDate >= 1 && currentDate <= 7) {
-                    currentWeekNumber = 36;
-                    weekStartDate = new Date(2025, 8, 1);  // Sep 1
-                    weekEndDate = new Date(2025, 8, 7);    // Sep 7
-                } else if (currentDate >= 8 && currentDate <= 14) {
-                    currentWeekNumber = 37;
-                    weekStartDate = new Date(2025, 8, 8);  // Sep 8
-                    weekEndDate = new Date(2025, 8, 14);   // Sep 14
-                }
-                // 可以继续添加更多周数...
+            // ISO周数计算：2025年第35周是8月25日-8月31日
+            // 使用标准的ISO 8601周数计算
+            function getISOWeek(date) {
+                const target = new Date(date.valueOf());
+                const dayNr = (date.getDay() + 6) % 7; // 周一=0, 周日=6
+                target.setDate(target.getDate() - dayNr + 3); // 设置到该周的周四
+                const jan4 = new Date(target.getFullYear(), 0, 4); // 1月4日
+                const dayDiff = (target - jan4) / 86400000; // 天数差
+                return 1 + Math.floor(dayDiff / 7); // 周数
             }
 
-            // 如果没有找到精确匹配，使用默认计算
-            if (!weekStartDate) {
-                // 简单的备用计算
-                const yearStart = new Date(2025, 0, 6); // Jan 6, 2025
-                const daysDiff = Math.floor((now - yearStart) / (24 * 60 * 60 * 1000));
-                currentWeekNumber = Math.floor(daysDiff / 7) + 1;
-                weekStartDate = new Date(yearStart.getTime() + (currentWeekNumber - 1) * 7 * 24 * 60 * 60 * 1000);
-                weekEndDate = new Date(weekStartDate.getTime() + 6 * 24 * 60 * 60 * 1000);
-            }
+            const currentWeekNumber = getISOWeek(now);
+
+            // 计算当前周的开始日期（周一）
+            const dayOfWeek = now.getDay(); // 0=周日, 1=周一, ..., 6=周六
+            const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek; // 计算到周一的偏移
+            const weekStartDate = new Date(now);
+            weekStartDate.setDate(now.getDate() + mondayOffset);
+
+            // 计算当前周的结束日期（周日）
+            const weekEndDate = new Date(weekStartDate);
+            weekEndDate.setDate(weekStartDate.getDate() + 6);
 
             // 格式化日期
             const formatDate = (date) => {
